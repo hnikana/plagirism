@@ -3,13 +3,18 @@ from __future__ import print_function
 import argparse
 import os
 import pandas as pd
+from sklearn.preprocessing import StandardScaler
 
 # sklearn.externals.joblib is deprecated in 0.21 and will be removed in 0.23. 
-# from sklearn.externals import joblib
+#from sklearn.externals import joblib
 # Import joblib package directly
 import joblib
 
 ## TODO: Import any additional libraries you need to define a model
+
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression
 
 
 # Provided model load function
@@ -56,15 +61,18 @@ if __name__ == '__main__':
     
     
     ## --- Your code here --- ##
-    
+    numeric_transformer = Pipeline(steps=[('scaler', StandardScaler())
+        ])
+    preprocessor = ColumnTransformer(transformers=[
+    ('num', numeric_transformer, list(range(len(train_x.columns))))])
 
     ## TODO: Define a model 
-    model = None
+    model = Pipeline([('preprocessor', preprocessor), ('LR', LogisticRegression())])
     
     
     ## TODO: Train the model
     
-    
+    model.fit(train_x , train_y)
     
     ## --- End of your code  --- ##
     
